@@ -4,11 +4,14 @@ import com.klasix12.devskills.dto.ErrorResponseDto;
 import com.klasix12.devskills.exception.EmailAlreadyExistsException;
 import com.klasix12.devskills.exception.UsernameAlreadyExistsException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ErrorHandler {
@@ -16,20 +19,37 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto handleEmailAlreadyExistsException(EmailAlreadyExistsException e) {
-        return getError("Email already exists", HttpStatus.BAD_REQUEST);
+        return getError("Email already exists.", e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponseDto handleUsernameAlreadyExistsException(UsernameAlreadyExistsException e) {
-        return getError("Username already exists", HttpStatus.BAD_REQUEST);
+        return getError("Username already exists.", e, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponseDto handleValidationException(MethodArgumentNotValidException e) {
+        List<String> validationErrors = e.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(fieldError -> String.format("%s: %s", fieldError.getField(), fieldError.getDefaultMessage()))
+                .collect(Collectors.toList());
+        String errorMessage = String.join("; ", validationErrors);
+        return ErrorResponseDto.builder()
+                .message("Validation failed.")
+                .reason(errorMessage)
+                .status(HttpStatus.BAD_REQUEST.value())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
 
-    private ErrorResponseDto getError(String message, HttpStatus status) {
+    private ErrorResponseDto getError(String message, Throwable e, HttpStatus status) {
         return ErrorResponseDto.builder()
                 .message(message)
-                .status(status.getReasonPhrase())
+                .reason(e.getMessage())
+                .status(status.value())
                 .timestamp(LocalDateTime.now())
                 .build();
     }

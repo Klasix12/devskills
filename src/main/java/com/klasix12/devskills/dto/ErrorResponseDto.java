@@ -11,7 +11,9 @@ public class ErrorResponseDto {
 
     private String message;
 
-    private String status;
+    private String reason;
+
+    private Integer status;
 
     private LocalDateTime timestamp;
 

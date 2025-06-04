@@ -25,13 +25,12 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserRegistrationRequest req) {
         log.info("Creating user. email: {}, username: {}", req.getEmail(), req.getUsername());
         if (repository.findByUsername(req.getUsername()).isPresent()) {
-            throw new UsernameAlreadyExistsException("User with username " + req.getUsername() + " already exists");
+            throw new UsernameAlreadyExistsException("User with username " + req.getUsername() + " already exists.");
         }
         if (repository.findByEmail(req.getEmail()).isPresent()) {
-            throw new EmailAlreadyExistsException("User with email " + req.getEmail() + " already exists");
+            throw new EmailAlreadyExistsException("User with email " + req.getEmail() + " already exists.");
         }
         User savedUser = UserMapper.toUser(req);
         return UserMapper.toUserDto(repository.save(savedUser));
     }
 }
-

@@ -9,6 +9,7 @@ import com.klasix12.devskills.model.User;
 import com.klasix12.devskills.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -30,7 +32,8 @@ public class UserServiceImpl implements UserService {
         if (repository.findByEmail(req.getEmail()).isPresent()) {
             throw new EmailAlreadyExistsException("User with email " + req.getEmail() + " already exists.");
         }
-        User savedUser = UserMapper.toUser(req);
-        return UserMapper.toUserDto(repository.save(savedUser));
+        User user = UserMapper.toUser(req);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return UserMapper.toUserDto(repository.save(user));
     }
 }

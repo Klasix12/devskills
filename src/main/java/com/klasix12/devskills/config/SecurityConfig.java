@@ -11,6 +11,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -18,8 +19,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(
                         c -> c.requestMatchers(
-                                HttpMethod.POST,
-                                "/users/registration").permitAll()
+                                        HttpMethod.POST,
+                                        "/users/registration"
+                                ).permitAll()
+                                .requestMatchers(
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/v3/api-docs.yaml"
+                                ).permitAll()
                 );
         return http.build();
     }

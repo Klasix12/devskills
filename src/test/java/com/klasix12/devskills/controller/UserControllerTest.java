@@ -19,15 +19,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -64,10 +59,10 @@ public class UserControllerTest {
         @DisplayName("should return 201 and UserDto fields when request is valid")
         void shouldReturnUserDto_whenRequestIsValid() throws Exception {
             when(service.createUser(any())).thenReturn(UserDto.builder()
-                            .username(validRequest.getUsername())
-                            .firstName(validRequest.getFirstName())
-                            .email(validRequest.getEmail())
-                            .createdAt(LocalDateTime.now())
+                    .username(validRequest.getUsername())
+                    .firstName(validRequest.getFirstName())
+                    .email(validRequest.getEmail())
+                    .createdAt(LocalDateTime.now())
                     .build());
             mockMvc.perform(post("/users/registration")
                             .content(mapper.writeValueAsString(validRequest))

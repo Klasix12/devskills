@@ -33,9 +33,11 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserRegistrationRequest req) {
         log.info("Creating user. email: {}, username: {}", req.getEmail(), req.getUsername());
         if (repository.findByUsername(req.getUsername()).isPresent()) {
+            log.warn("User with username {} already exists.", req.getUsername());
             throw new UsernameAlreadyExistsException("User with username " + req.getUsername() + " already exists.");
         }
         if (repository.findByEmail(req.getEmail()).isPresent()) {
+            log.warn("User with email {} already exists.", req.getUsername());
             throw new EmailAlreadyExistsException("User with email " + req.getEmail() + " already exists.");
         }
         User user = UserMapper.toUser(req);
@@ -43,7 +45,9 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("Role " + RoleName.USER + " not found."));
         user.setPassword(passwordEncoder.encode(req.getPassword()));
         user.setRoles(Set.of(role));
-        return UserMapper.toUserDto(repository.save(user));
+        User savedUser = repository.save(user);
 
+        log.info("User saved successfully. ID: {}, username: {}, email: {}", savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
+        return UserMapper.toUserDto(savedUser);
     }
 }

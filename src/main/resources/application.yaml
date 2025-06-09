@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: devskills
+
+  datasource:
+    url: jdbc:postgresql://localhost:6541/devskills
+    username: user
+    password: pass
+  jpa:
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+
+jwt:
+  secret: supersecretkeysupersecretkeysupersecretkeysupersecretkeysupersecretkey

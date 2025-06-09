@@ -39,6 +39,20 @@ public class AuthController {
                 .body(authService.login(req));
     }
 
+    @Operation(summary = "Refresh access and refresh tokens")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success",
+                    content = @Content(schema = @Schema(implementation = TokenResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponse> refresh(@RequestBody RefreshTokenRequest req) {
+        return ResponseEntity
+                .ok()
+                .body(authService.refresh(req));
+    }
+
     @Operation(summary = "Register a user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Success",

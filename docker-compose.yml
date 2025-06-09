@@ -23,3 +23,12 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
+    restart: unless-stopped
+  redis:
+    image: redis:8.0.2-alpine
+    container_name: devskills-redis
+    ports:
+      - "6544:6379"
+    command: redis-server --appendonly yes --requirepass pass
+    environment: []
+    restart: unless-stopped

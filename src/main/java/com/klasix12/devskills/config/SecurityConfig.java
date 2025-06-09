@@ -3,8 +3,6 @@ package com.klasix12.devskills.config;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -34,7 +32,8 @@ public class SecurityConfig {
                                 ).permitAll()
                                 .requestMatchers(
                                         "/auth/login",
-                                        "/auth/registration"
+                                        "/auth/registration",
+                                        "/auth/refresh"
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 )

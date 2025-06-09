@@ -1,9 +1,10 @@
 package com.klasix12.devskills.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-// TODO: доделать refreshToken
 @Data
+@AllArgsConstructor
 public class TokenResponse {
     private String accessToken;
     private String refreshToken;

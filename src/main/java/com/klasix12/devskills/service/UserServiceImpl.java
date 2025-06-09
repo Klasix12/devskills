@@ -50,4 +50,11 @@ public class UserServiceImpl implements UserService {
         log.info("User saved successfully. ID: {}, username: {}, email: {}", savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
         return UserMapper.toUserDto(savedUser);
     }
+
+    @Override
+    public UserDto getUser(String username) {
+        return UserMapper.toUserDto(repository.findByUsername(username).orElseThrow(
+                () -> new RuntimeException("User with username " + username + " not found.")
+        ));
+    }
 }

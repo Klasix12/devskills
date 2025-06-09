@@ -27,17 +27,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         c -> c
                                 .requestMatchers(
-                                        HttpMethod.POST,
-                                        "/users/registration"
-                                ).permitAll()
-                                .requestMatchers(
                                         "/v3/api-docs/**",
                                         "/swagger-ui/**",
                                         "/swagger-ui.html",
                                         "/v3/api-docs.yaml"
                                 ).permitAll()
                                 .requestMatchers(
-                                        "/auth/login"
+                                        "/auth/login",
+                                        "/auth/registration"
                                 ).permitAll()
                                 .anyRequest().authenticated()
                 )

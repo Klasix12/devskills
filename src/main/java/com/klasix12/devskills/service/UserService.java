@@ -2,7 +2,9 @@ package com.klasix12.devskills.service;
 
 import com.klasix12.devskills.dto.UserDto;
 import com.klasix12.devskills.dto.UserRegistrationRequest;
+import org.springframework.security.core.Authentication;
 
 public interface UserService {
     UserDto createUser(UserRegistrationRequest req);
+    UserDto getUser(String username);
 }

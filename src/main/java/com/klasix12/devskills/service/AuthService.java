@@ -3,7 +3,7 @@ package com.klasix12.devskills.service;
 import com.klasix12.devskills.dto.AuthRequest;
 import com.klasix12.devskills.dto.RefreshTokenRequest;
 import com.klasix12.devskills.dto.TokenResponse;
-import com.klasix12.devskills.security.JwtService;
+import com.klasix12.devskills.security.TokenManager;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,41 +18,27 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtService jwtService;
-    private final RedisService redisService;
+    private final TokenManager tokenManager;
 
     public TokenResponse login(AuthRequest req) {
         Authentication auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword())
         );
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        String accessToken = jwtService.generateAccessToken(userDetails.getUsername());
-        String refreshToken = jwtService.generateRefreshToken(userDetails.getUsername());
-        saveRefreshToken(refreshToken);
+        String accessToken = tokenManager.generateAccessToken(userDetails.getUsername());
+        String refreshToken = tokenManager.generateRefreshToken(userDetails.getUsername());
         return new TokenResponse(accessToken, refreshToken);
     }
 
     public TokenResponse refresh(RefreshTokenRequest req) {
-        if (!jwtService.isTokenValid(req.getRefreshToken())) {
-            throw new RuntimeException("Invalid refresh token");
+        if (!tokenManager.isRefreshTokenValid(req.getRefreshToken())) {
+            throw new RuntimeException("Refresh token is invalid");
         }
-        String username = jwtService.extractUsername(req.getRefreshToken());
-        String newAccessToken = jwtService.generateAccessToken(username);
-        String newRefreshToken = jwtService.generateRefreshToken(username);
-        deleteRefreshToken(req.getRefreshToken());
-        saveRefreshToken(newRefreshToken);
+        tokenManager.revokeRefreshToken(req.getRefreshToken());
+
+        String username = tokenManager.extractUsername(req.getRefreshToken());
+        String newAccessToken = tokenManager.generateAccessToken(username);
+        String newRefreshToken = tokenManager.generateRefreshToken(username);
         return new TokenResponse(newAccessToken, newRefreshToken);
-    }
-
-    private void saveRefreshToken(String refreshToken) {
-        String id = jwtService.extractId(refreshToken);
-        String username = jwtService.extractUsername(refreshToken);
-        long expiration = jwtService.extractExpiration(refreshToken).getTime() - System.currentTimeMillis();
-        System.out.println(id + " | " + username + " | " + expiration);
-        redisService.save(id, username, expiration);
-    }
-
-    private void deleteRefreshToken(String refreshToken) {
-        redisService.delete(refreshToken);
     }
 }

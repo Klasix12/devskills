@@ -1,6 +1,6 @@
 package com.klasix12.devskills.config;
 
-import com.klasix12.devskills.security.JwtService;
+import com.klasix12.devskills.security.TokenManager;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,7 +21,7 @@ import java.io.IOException;
 @AllArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtService jwtService;
+    private final TokenManager tokenManager;
     private final UserDetailsService userDetailsService;
     private final String header = "Authorization";
     private final String tokenPrefix = "Bearer ";
@@ -39,14 +39,14 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             jwtToken = authHeader.substring(tokenPrefix.length());
-            username = jwtService.extractUsername(jwtToken);
+            username = tokenManager.extractUsername(jwtToken);
         } catch (JwtException e) {
             throw new RuntimeException("Invalid JWT token", e);
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (jwtService.isTokenValid(jwtToken, userDetails)) {
+            if (!tokenManager.isTokenExpired(jwtToken) && tokenManager.isAccessTokenValid(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,

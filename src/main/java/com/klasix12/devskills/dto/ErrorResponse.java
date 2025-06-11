@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @Schema(description = "Default error response")
-public class ErrorResponseDto {
+public class ErrorResponse {
 
     @Schema(description = "Short error description", example = "Email already exists.")
     private String message;

@@ -1,6 +1,6 @@
 package com.klasix12.devskills.controller;
 
-import com.klasix12.devskills.dto.ErrorResponseDto;
+import com.klasix12.devskills.dto.ErrorResponse;
 import com.klasix12.devskills.exception.EmailAlreadyExistsException;
 import com.klasix12.devskills.exception.UsernameAlreadyExistsException;
 import org.springframework.http.HttpStatus;
@@ -18,26 +18,26 @@ public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponseDto handleEmailAlreadyExistsException(EmailAlreadyExistsException e) {
+    public ErrorResponse handleEmailAlreadyExistsException(EmailAlreadyExistsException e) {
         return getError("Email already exists.", e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponseDto handleUsernameAlreadyExistsException(UsernameAlreadyExistsException e) {
+    public ErrorResponse handleUsernameAlreadyExistsException(UsernameAlreadyExistsException e) {
         return getError("Username already exists.", e, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponseDto handleValidationException(MethodArgumentNotValidException e) {
+    public ErrorResponse handleValidationException(MethodArgumentNotValidException e) {
         List<String> validationErrors = e.getBindingResult()
                 .getFieldErrors()
                 .stream()
                 .map(fieldError -> String.format("%s: %s", fieldError.getField(), fieldError.getDefaultMessage()))
                 .collect(Collectors.toList());
         String errorMessage = String.join("; ", validationErrors);
-        return ErrorResponseDto.builder()
+        return ErrorResponse.builder()
                 .message("Validation failed.")
                 .reason(errorMessage)
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -45,8 +45,8 @@ public class ErrorHandler {
                 .build();
     }
 
-    private ErrorResponseDto getError(String message, Throwable e, HttpStatus status) {
-        return ErrorResponseDto.builder()
+    private ErrorResponse getError(String message, Throwable e, HttpStatus status) {
+        return ErrorResponse.builder()
                 .message(message)
                 .reason(e.getMessage())
                 .status(status.value())

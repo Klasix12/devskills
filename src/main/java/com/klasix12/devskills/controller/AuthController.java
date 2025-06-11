@@ -1,5 +1,6 @@
 package com.klasix12.devskills.controller;
 
+import com.klasix12.devskills.annotation.DefaultApiResponses;
 import com.klasix12.devskills.dto.*;
 import com.klasix12.devskills.service.AuthService;
 import com.klasix12.devskills.service.UserService;
@@ -25,12 +26,10 @@ public class AuthController {
     private final AuthService authService;
     private final UserService userService;
 
-    @Operation(summary = "Login a user")
+    @DefaultApiResponses(summary = "Login a user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
-                    content = @Content(schema = @Schema(implementation = TokenResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+                    content = @Content(schema = @Schema(implementation = TokenResponse.class)))
     })
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody AuthRequest req) {
@@ -39,12 +38,10 @@ public class AuthController {
                 .body(authService.login(req));
     }
 
-    @Operation(summary = "Refresh access and refresh tokens")
+    @DefaultApiResponses(summary = "Refresh access and refresh tokens")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success",
-                    content = @Content(schema = @Schema(implementation = TokenResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+                    content = @Content(schema = @Schema(implementation = TokenResponse.class)))
     })
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody RefreshTokenRequest req) {
@@ -53,17 +50,13 @@ public class AuthController {
                 .body(authService.refresh(req));
     }
 
-    @Operation(summary = "Register a user")
+    @DefaultApiResponses(summary = "Register a user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Success",
-                    content = @Content(schema = @Schema(implementation = UserDto.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input",
-                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+                    content = @Content(schema = @Schema(implementation = UserDto.class)))
     })
     @PostMapping("/registration")
-    public ResponseEntity<UserDto> register(
-            @Valid
-            @RequestBody UserRegistrationRequest req) {
+    public ResponseEntity<UserDto> register(@Valid @RequestBody UserRegistrationRequest req) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(userService.createUser(req));

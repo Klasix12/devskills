@@ -33,7 +33,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@RequestBody AuthRequest req) {
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody AuthRequest req) {
         return ResponseEntity
                 .ok()
                 .body(authService.login(req));
@@ -47,7 +47,7 @@ public class AuthController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponse> refresh(@RequestBody RefreshTokenRequest req) {
+    public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody RefreshTokenRequest req) {
         return ResponseEntity
                 .ok()
                 .body(authService.refresh(req));

@@ -1,4 +1,4 @@
-package com.klasix12.devskills.service;
+package com.klasix12.devskills.service.impl;
 
 import com.klasix12.devskills.dto.RoleName;
 import com.klasix12.devskills.dto.UserDto;
@@ -10,6 +10,7 @@ import com.klasix12.devskills.model.Role;
 import com.klasix12.devskills.model.User;
 import com.klasix12.devskills.repository.RoleRepository;
 import com.klasix12.devskills.repository.UserRepository;
+import com.klasix12.devskills.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

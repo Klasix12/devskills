@@ -1,7 +1,6 @@
 package com.klasix12.devskills.controller;
 
 import com.klasix12.devskills.dto.UserDto;
-import com.klasix12.devskills.service.RedisService;
 import com.klasix12.devskills.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;

@@ -4,7 +4,6 @@ import com.klasix12.devskills.annotation.DefaultApiResponses;
 import com.klasix12.devskills.dto.*;
 import com.klasix12.devskills.service.AuthService;
 import com.klasix12.devskills.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

@@ -2,7 +2,7 @@ package com.klasix12.devskills.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.klasix12.devskills.dto.*;
-import com.klasix12.devskills.service.AuthService;
+import com.klasix12.devskills.service.impl.AuthServiceImpl;
 import com.klasix12.devskills.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +34,7 @@ public class AuthControllerTest {
     private UserService userService;
 
     @MockitoBean
-    private AuthService authService;
+    private AuthServiceImpl authService;
 
     @Autowired
     private MockMvc mockMvc;

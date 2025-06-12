@@ -9,6 +9,7 @@ import com.klasix12.devskills.model.Role;
 import com.klasix12.devskills.model.User;
 import com.klasix12.devskills.repository.RoleRepository;
 import com.klasix12.devskills.repository.UserRepository;
+import com.klasix12.devskills.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

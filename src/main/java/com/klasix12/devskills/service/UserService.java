@@ -5,4 +5,6 @@ import com.klasix12.devskills.dto.UserRegistrationRequest;
 
 public interface UserService {
     UserDto createUser(UserRegistrationRequest req);
+
+    UserDto getUser(String username);
 }

@@ -23,9 +23,7 @@ public class UserMapper {
         return User.builder()
                 .username(req.getUsername())
                 .firstName(req.getFirstName())
-                .password(req.getPassword())
                 .email(req.getEmail())
-                .role("USER")
                 .isConfirmed(false)
                 .createdAt(LocalDateTime.now())
                 .build();

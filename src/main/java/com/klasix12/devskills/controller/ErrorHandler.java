@@ -2,6 +2,7 @@ package com.klasix12.devskills.controller;
 
 import com.klasix12.devskills.dto.ErrorResponse;
 import com.klasix12.devskills.exception.EmailAlreadyExistsException;
+import com.klasix12.devskills.exception.NotFoundException;
 import com.klasix12.devskills.exception.UsernameAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -43,6 +44,12 @@ public class ErrorHandler {
                 .status(HttpStatus.BAD_REQUEST.value())
                 .timestamp(LocalDateTime.now())
                 .build();
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNotFoundException(NotFoundException e) {
+        return getError("Not found.", e, HttpStatus.NOT_FOUND);
     }
 
     private ErrorResponse getError(String message, Throwable e, HttpStatus status) {

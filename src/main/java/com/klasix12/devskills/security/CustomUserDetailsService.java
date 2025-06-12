@@ -1,7 +1,7 @@
-package com.klasix12.devskills.service;
+package com.klasix12.devskills.security;
 
 import com.klasix12.devskills.dto.CustomUserDetails;
-import com.klasix12.devskills.model.User;
+import com.klasix12.devskills.exception.NotFoundException;
 import com.klasix12.devskills.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,8 +17,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(username));
-        return new CustomUserDetails(user);
+        return userRepository.findByUsername(username)
+                .map(CustomUserDetails::new)
+                .orElseThrow(() -> new NotFoundException("User not found: " + username));
     }
 }

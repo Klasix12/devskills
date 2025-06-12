@@ -15,11 +15,12 @@ import java.util.stream.Collectors;
 public class CustomUserDetails implements UserDetails {
 
     private User user;
+    private final String rolePrefix = "ROLE_";
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().toString()))
+                .map(role -> new SimpleGrantedAuthority(rolePrefix + role.getName().toString()))
                 .collect(Collectors.toSet());
     }
 

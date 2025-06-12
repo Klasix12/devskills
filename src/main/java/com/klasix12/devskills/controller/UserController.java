@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-    private final RedisService service;
 
     @GetMapping("/me")
     public ResponseEntity<UserDto> getUser(Authentication auth) {
